@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"expvar"
 	"flag"
+	"fmt"
 	"greenlight.mundanelizard.com/internal/data"
 	"greenlight.mundanelizard.com/internal/jsonlog"
 	"greenlight.mundanelizard.com/internal/mailer"
@@ -17,7 +18,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const version = "1.0.0"
+var (
+	version   string
+	buildTime string
+)
 
 type config struct {
 	port int
@@ -80,7 +84,15 @@ func main() {
 		return nil
 	})
 
+	displayVersion := flag.Bool("version", false, "Display version and exit")
+
 	flag.Parse()
+
+	if *displayVersion {
+		fmt.Printf("Version:\t%s\n", version)
+		fmt.Printf("Build time:\t%s\n", buildTime)
+		os.Exit(0)
+	}
 
 	logger := jsonlog.New(os.Stdout, jsonlog.LevelInfo)
 
@@ -143,3 +155,6 @@ func openDB(cfg config) (*sql.DB, error) {
 
 	return db, nil
 }
+
+// git tag v1.0.0
+// git log
