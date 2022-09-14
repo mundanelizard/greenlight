@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// go:embed "templates"
+//go:embed "templates"
 var templateFS embed.FS
 
 type Mailer struct {
@@ -18,7 +18,7 @@ type Mailer struct {
 
 func New(host string, port int, username, password, sender string) Mailer {
 	dialer := mail.NewDialer(host, port, username, password)
-	dialer.Timeout = 5 * time.Second
+	dialer.Timeout = 50 * time.Second
 
 	return Mailer{
 		dialer: dialer,
@@ -64,4 +64,3 @@ func (m Mailer) Send(recipient, templateFile string, data interface{}) error {
 
 	return nil
 }
-
